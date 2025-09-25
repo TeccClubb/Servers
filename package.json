@@ -1,0 +1,52 @@
+{
+  "name": "tecclub-monitor",
+  "version": "0.1.0",
+  "private": true,
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint",
+    "postinstall": "prisma generate",
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+  "dependencies": {
+    "@auth/prisma-adapter": "^2.10.0",
+    "@prisma/client": "^5.10.0",
+    "bcrypt": "^5.1.1",
+    "chart.js": "^4.4.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^3.0.6",
+    "framer-motion": "^12.23.18",
+    "next": "15.5.3",
+    "next-auth": "^5.0.0-beta.12",
+    "react": "19.1.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-country-flag": "^3.1.0",
+    "react-dom": "19.1.0",
+    "react-hook-form": "^7.50.0",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.0.0",
+    "swr": "^2.2.4",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^3.22.4",
+    "zustand": "^4.4.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.3",
+    "prisma": "^5.10.0",
+    "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
+  }
+}
