@@ -16,18 +16,18 @@ export default function RunHealthCheckButton({ className = "" }: RunHealthCheckB
     try {
       setIsLoading(true);
       toast.loading("Running health checks on all servers...", { id: "healthcheck" });
-      
+
       const response = await fetch("/api/servers/health-all", {
         method: "POST",
       });
-      
+
       if (!response.ok) {
         throw new Error("Failed to run health check");
       }
 
       const result = await response.json();
       toast.success(`Health check completed for ${result.completed} servers!`, { id: "healthcheck" });
-      
+
       // Reload the page to show updated data
       window.location.reload();
     } catch (error) {

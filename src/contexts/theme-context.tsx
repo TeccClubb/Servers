@@ -27,15 +27,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const updateEffectiveTheme = () => {
       let newEffectiveTheme: 'light' | 'dark';
-      
+
       if (theme === 'system') {
         newEffectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       } else {
         newEffectiveTheme = theme;
       }
-      
+
       setEffectiveTheme(newEffectiveTheme);
-      
+
       // Apply theme to document
       const root = document.documentElement;
       if (newEffectiveTheme === 'dark') {
@@ -43,7 +43,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       } else {
         root.classList.remove('dark');
       }
-      
+
       // Save to localStorage
       localStorage.setItem('theme', theme);
     };
@@ -57,7 +57,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         updateEffectiveTheme();
       }
     };
-    
+
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [theme]);

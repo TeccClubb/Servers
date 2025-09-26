@@ -9,7 +9,7 @@ export async function PATCH(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }

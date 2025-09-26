@@ -18,7 +18,7 @@ export default async function UsersPage() {
       email: session.user?.email!
     }
   });
-  
+
   if (!user || (user.role !== "ADMIN")) {
     redirect("/dashboard");
   }

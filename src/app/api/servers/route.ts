@@ -5,7 +5,7 @@ import prismadb from "@/lib/prismadb";
 export async function GET() {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -13,7 +13,7 @@ export async function GET() {
     // If user is admin, get all servers
     // If regular user, get only servers they have access to
     let servers;
-    
+
     if (session.user.role === "ADMIN") {
       servers = await prismadb.server.findMany({
         include: {
@@ -79,13 +79,13 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const body = await req.json();
-    
+
     const { name, ip, domain, country, username, password, privateKey } = body;
 
     if (!name || !ip || !country) {

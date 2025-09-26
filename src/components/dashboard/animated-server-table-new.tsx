@@ -9,10 +9,10 @@ import { formatDistanceToNow } from "date-fns";
 import ReactCountryFlag from "react-country-flag";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
-import { 
-  FiCheck, 
-  FiAlertTriangle, 
-  FiX, 
+import {
+  FiCheck,
+  FiAlertTriangle,
+  FiX,
   FiHelpCircle,
 } from "react-icons/fi";
 
@@ -40,32 +40,32 @@ const AnimatedServerTable = ({ servers }: ServerTableProps) => {
   const [deleteServerId, setDeleteServerId] = useState<string | null>(null);
   const [serverToDelete, setServerToDelete] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const openDeleteModal = (server: any) => {
     setServerToDelete(server);
     setDeleteServerId(server.id);
     setIsDeleting(true);
   };
-  
+
   const closeDeleteModal = () => {
     setIsDeleting(false);
     setServerToDelete(null);
     setDeleteServerId(null);
   };
-  
+
   const handleDelete = async () => {
     if (!deleteServerId) return;
-    
+
     try {
       setIsLoading(true);
       const response = await fetch(`/api/servers/${deleteServerId}`, {
         method: "DELETE",
       });
-      
+
       if (!response.ok) {
         throw new Error("Failed to delete server");
       }
-      
+
       toast.success("Server deleted successfully");
       closeDeleteModal();
       router.refresh();
@@ -76,7 +76,7 @@ const AnimatedServerTable = ({ servers }: ServerTableProps) => {
       setIsLoading(false);
     }
   };
-  
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full">
@@ -162,24 +162,23 @@ const AnimatedServerTable = ({ servers }: ServerTableProps) => {
                     </div>
                   </div>
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="text-sm text-gray-600 font-mono bg-gray-50 px-2 py-1 rounded">
                     {server.ip}
                   </span>
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap">
                   <motion.span
                     whileHover={{ scale: 1.05 }}
-                    className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${
-                      statusColors[server.status as keyof typeof statusColors] || statusColors.UNKNOWN
-                    }`}
+                    className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${statusColors[server.status as keyof typeof statusColors] || statusColors.UNKNOWN
+                      }`}
                   >
                     {server.status}
                   </motion.span>
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center justify-center">
                     <motion.div
@@ -190,27 +189,25 @@ const AnimatedServerTable = ({ servers }: ServerTableProps) => {
                     </motion.div>
                   </div>
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap">
                   {server.healthMetrics && server.healthMetrics[0] && server.healthMetrics[0].uptime !== undefined ? (
                     <div className="flex items-center space-x-2">
                       <div className="w-16 bg-gray-200 rounded-full h-2">
-                        <motion.div 
+                        <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${Math.min(100, server.healthMetrics[0].uptime)}%` }}
                           transition={{ duration: 1, delay: index * 0.1 }}
-                          className={`h-2 rounded-full ${
-                            server.healthMetrics[0].uptime >= 90 ? 'bg-green-500' :
-                            server.healthMetrics[0].uptime >= 70 ? 'bg-yellow-500' :
-                            'bg-red-500'
-                          }`}
+                          className={`h-2 rounded-full ${server.healthMetrics[0].uptime >= 90 ? 'bg-green-500' :
+                              server.healthMetrics[0].uptime >= 70 ? 'bg-yellow-500' :
+                                'bg-red-500'
+                            }`}
                         />
                       </div>
-                      <span className={`text-sm font-semibold ${
-                        server.healthMetrics[0].uptime >= 90 ? 'text-green-600' :
-                        server.healthMetrics[0].uptime >= 70 ? 'text-yellow-600' :
-                        'text-red-600'
-                      }`}>
+                      <span className={`text-sm font-semibold ${server.healthMetrics[0].uptime >= 90 ? 'text-green-600' :
+                          server.healthMetrics[0].uptime >= 70 ? 'text-yellow-600' :
+                            'text-red-600'
+                        }`}>
                         {server.healthMetrics[0].uptime.toFixed(1)}
                       </span>
                     </div>
@@ -218,15 +215,15 @@ const AnimatedServerTable = ({ servers }: ServerTableProps) => {
                     <span className="text-gray-400 text-sm">N/A</span>
                   )}
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                   {server.lastChecked
                     ? formatDistanceToNow(new Date(server.lastChecked), {
-                        addSuffix: true,
-                      })
+                      addSuffix: true,
+                    })
                     : "Never"}
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                   {server.speedTests && server.speedTests[0] && server.speedTests[0].downloadSpeed
                     ? (
@@ -239,7 +236,7 @@ const AnimatedServerTable = ({ servers }: ServerTableProps) => {
                     )
                     : "Not tested"}
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex items-center justify-end space-x-2">
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -260,8 +257,8 @@ const AnimatedServerTable = ({ servers }: ServerTableProps) => {
                         Details
                       </Link>
                     </motion.div>
-                    <motion.div 
-                      whileHover={{ scale: 1.05 }} 
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
                       <button
@@ -297,12 +294,12 @@ const AnimatedServerTable = ({ servers }: ServerTableProps) => {
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900">Delete Server</h3>
               </div>
-              
+
               <div className="mb-6">
                 <p className="text-gray-600 mb-4">
                   Are you sure you want to delete this server? This action cannot be undone.
                 </p>
-                
+
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-6 rounded-md overflow-hidden shadow-sm border border-gray-200 bg-white">
@@ -327,7 +324,7 @@ const AnimatedServerTable = ({ servers }: ServerTableProps) => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex space-x-3 justify-end">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
@@ -337,7 +334,7 @@ const AnimatedServerTable = ({ servers }: ServerTableProps) => {
                 >
                   Cancel
                 </motion.button>
-                
+
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}

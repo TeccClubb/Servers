@@ -22,7 +22,7 @@ export default async function UserServersPage({ params }: UserServersPageProps) 
       email: session.user?.email!
     }
   });
-  
+
   if (!currentUser || !('role' in currentUser) || currentUser.role !== "ADMIN") {
     redirect("/dashboard");
   }
@@ -65,7 +65,7 @@ export default async function UserServersPage({ params }: UserServersPageProps) 
         SELECT * FROM "ServerAccess"
         WHERE "userId" = ${userId}
       `;
-      
+
       if (Array.isArray(results)) {
         userServerAccess = results;
       }
@@ -83,10 +83,10 @@ export default async function UserServersPage({ params }: UserServersPageProps) 
         </p>
       </div>
 
-      <UserServerAccess 
-        user={user} 
-        servers={servers} 
-        existingAccess={userServerAccess} 
+      <UserServerAccess
+        user={user}
+        servers={servers}
+        existingAccess={userServerAccess}
       />
     </div>
   );

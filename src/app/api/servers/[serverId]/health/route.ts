@@ -8,7 +8,7 @@ export async function POST(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -16,7 +16,7 @@ export async function POST(
     if (!params.serverId) {
       return new NextResponse("Server ID is required", { status: 400 });
     }
-    
+
     // Get the current user
     const user = await prismadb.user.findUnique({
       where: {
@@ -30,7 +30,7 @@ export async function POST(
 
     // Check if user is admin
     const isAdmin = user.role === "ADMIN";
-    
+
     // If not admin, verify user has permission to run health check on this server
     if (!isAdmin) {
       const serverAccess = await prismadb.serverAccess.findUnique({
@@ -41,7 +41,7 @@ export async function POST(
           }
         }
       });
-      
+
       if (!serverAccess || !serverAccess.canRunHealthCheck) {
         return new NextResponse("You don't have permission to run health check on this server", { status: 403 });
       }
@@ -64,7 +64,7 @@ export async function POST(
     try {
       // Call the VPS API endpoint for health check
       const apiUrl = `http://${server.ip}:5001/api/vps-health`;
-      
+
       const response = await fetch(apiUrl, {
         method: "GET",
         headers: {
@@ -79,7 +79,7 @@ export async function POST(
       }
 
       const data = await response.json();
-      
+
       // Create a new health metric entry in the database
       const healthMetric = await prismadb.healthMetric.create({
         data: {
@@ -108,7 +108,7 @@ export async function POST(
       });
     } catch (error) {
       console.error(`Error checking server health:`, error);
-      
+
       // Mark server as inactive if we can't reach it
       await prismadb.server.update({
         where: {
@@ -119,7 +119,7 @@ export async function POST(
           lastChecked: new Date()
         }
       });
-      
+
       return new NextResponse("Failed to check server health", { status: 500 });
     }
   } catch (error) {

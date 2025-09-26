@@ -24,7 +24,7 @@ interface BandwidthUsageProps {
 const BandwidthUsageMetrics = ({ monthlyBandwidth, liveBandwidth }: BandwidthUsageProps) => {
   const hasMonthlyData = monthlyBandwidth && Object.keys(monthlyBandwidth).length > 0;
   const hasLiveData = liveBandwidth && Object.keys(liveBandwidth).length > 0;
-  
+
   if (!hasMonthlyData && !hasLiveData) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
@@ -33,14 +33,14 @@ const BandwidthUsageMetrics = ({ monthlyBandwidth, liveBandwidth }: BandwidthUsa
       </div>
     );
   }
-  
+
   // Calculate monthly bandwidth usage percentage
-  const monthlyUsagePercent = hasMonthlyData 
-    ? (monthlyBandwidth.total_mb / monthlyBandwidth.limit_mb) * 100 
+  const monthlyUsagePercent = hasMonthlyData
+    ? (monthlyBandwidth.total_mb / monthlyBandwidth.limit_mb) * 100
     : 0;
-  
+
   // Calculate live bandwidth usage percentage
-  const liveUsagePercent = hasLiveData 
+  const liveUsagePercent = hasLiveData
     ? (liveBandwidth.total_mbit_per_s / liveBandwidth.limit_mbit_per_s) * 100
     : 0;
 
@@ -64,7 +64,7 @@ const BandwidthUsageMetrics = ({ monthlyBandwidth, liveBandwidth }: BandwidthUsa
   };
 
   return (
-    <motion.div 
+    <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -84,7 +84,7 @@ const BandwidthUsageMetrics = ({ monthlyBandwidth, liveBandwidth }: BandwidthUsa
             </div>
             <h3 className="text-md font-medium text-gray-900 dark:text-gray-100">Monthly Bandwidth</h3>
           </div>
-          
+
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 border border-blue-100 dark:border-blue-800">
             {/* Usage Bar */}
             <div className="mb-3">
@@ -95,12 +95,11 @@ const BandwidthUsageMetrics = ({ monthlyBandwidth, liveBandwidth }: BandwidthUsa
                 </span>
               </div>
               <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                <div 
-                  className={`h-2.5 rounded-full ${
-                    monthlyUsagePercent >= 90 ? 'bg-red-600' : 
-                    monthlyUsagePercent >= 75 ? 'bg-yellow-500' : 
-                    'bg-green-500'
-                  }`}
+                <div
+                  className={`h-2.5 rounded-full ${monthlyUsagePercent >= 90 ? 'bg-red-600' :
+                      monthlyUsagePercent >= 75 ? 'bg-yellow-500' :
+                        'bg-green-500'
+                    }`}
                   style={{ width: `${Math.min(100, monthlyUsagePercent)}%` }}
                 />
               </div>
@@ -110,7 +109,7 @@ const BandwidthUsageMetrics = ({ monthlyBandwidth, liveBandwidth }: BandwidthUsa
                 <span>100%</span>
               </div>
             </div>
-            
+
             {/* Download/Upload Details */}
             <div className="grid grid-cols-2 gap-3 mt-4">
               <div className="bg-white dark:bg-gray-700 rounded-lg p-3 border border-blue-100 dark:border-blue-700">
@@ -120,7 +119,7 @@ const BandwidthUsageMetrics = ({ monthlyBandwidth, liveBandwidth }: BandwidthUsa
                 </div>
                 <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">{monthlyBandwidth.downloaded}</div>
               </div>
-              
+
               <div className="bg-white dark:bg-gray-700 rounded-lg p-3 border border-blue-100 dark:border-blue-700">
                 <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-2">
                   <FiUpload className="mr-1 text-red-600 dark:text-red-400" />
@@ -142,7 +141,7 @@ const BandwidthUsageMetrics = ({ monthlyBandwidth, liveBandwidth }: BandwidthUsa
             </div>
             <h3 className="text-md font-medium text-gray-900 dark:text-gray-100">Live Bandwidth</h3>
           </div>
-          
+
           <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-lg p-4 border border-indigo-100 dark:border-indigo-800">
             {/* Usage Bar */}
             <div className="mb-3">
@@ -153,15 +152,14 @@ const BandwidthUsageMetrics = ({ monthlyBandwidth, liveBandwidth }: BandwidthUsa
                 </span>
               </div>
               <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                <motion.div 
+                <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.min(100, liveUsagePercent)}%` }}
                   transition={{ duration: 1 }}
-                  className={`h-2.5 rounded-full ${
-                    liveUsagePercent >= 90 ? 'bg-red-600' : 
-                    liveUsagePercent >= 75 ? 'bg-yellow-500' : 
-                    'bg-green-500'
-                  }`}
+                  className={`h-2.5 rounded-full ${liveUsagePercent >= 90 ? 'bg-red-600' :
+                      liveUsagePercent >= 75 ? 'bg-yellow-500' :
+                        'bg-green-500'
+                    }`}
                 />
               </div>
               <div className="mt-1 flex justify-between text-xs text-gray-500 dark:text-gray-400">
@@ -170,7 +168,7 @@ const BandwidthUsageMetrics = ({ monthlyBandwidth, liveBandwidth }: BandwidthUsa
                 <span>100%</span>
               </div>
             </div>
-            
+
             {/* Download/Upload Rates */}
             <div className="grid grid-cols-2 gap-3 mt-4">
               <div className="bg-white dark:bg-gray-700 rounded-lg p-3 border border-indigo-100 dark:border-indigo-700">
@@ -180,7 +178,7 @@ const BandwidthUsageMetrics = ({ monthlyBandwidth, liveBandwidth }: BandwidthUsa
                 </div>
                 <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">{liveBandwidth.download_rate}</div>
               </div>
-              
+
               <div className="bg-white dark:bg-gray-700 rounded-lg p-3 border border-indigo-100 dark:border-indigo-700">
                 <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-2">
                   <FiUpload className="mr-1 text-red-600 dark:text-red-400" />

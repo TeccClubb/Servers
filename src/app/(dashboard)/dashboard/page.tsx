@@ -20,15 +20,15 @@ export default async function DashboardPage() {
       email: session.user?.email!
     }
   });
-  
+
   if (!user) {
     redirect("/login");
   }
-  
+
   const isAdmin = 'role' in user && user.role === "ADMIN";
-  
+
   let servers: any[] = [];
-  
+
   if (isAdmin) {
     // Admin can see all servers
     servers = await prismadb.server.findMany({
@@ -52,7 +52,7 @@ export default async function DashboardPage() {
     try {
       // First, get the user's server access permissions
       let userServerIds: string[] = [];
-      
+
       if ('serverAccess' in prismadb) {
         // @ts-ignore - The model exists in the DB but might not be in TS types yet
         const serverAccess = await prismadb.serverAccess.findMany({
@@ -70,12 +70,12 @@ export default async function DashboardPage() {
           SELECT "serverId" FROM "ServerAccess"
           WHERE "userId" = ${user.id}
         `;
-        
+
         if (Array.isArray(results)) {
           userServerIds = results.map((result: any) => result.serverId);
         }
       }
-      
+
       // Then, get only the servers the user has access to
       servers = await prismadb.server.findMany({
         where: {
@@ -98,10 +98,10 @@ export default async function DashboardPage() {
           }
         }
       }) as any[];
-      
+
       // Create a permissions map
       const permissionsMap: Record<string, any> = {};
-      
+
       // For each server, get permissions from raw SQL
       for (const server of servers) {
         const accessResults = await prismadb.$queryRaw`
@@ -109,12 +109,12 @@ export default async function DashboardPage() {
           FROM "ServerAccess"
           WHERE "userId" = ${user.id} AND "serverId" = ${server.id}
         `;
-        
+
         if (Array.isArray(accessResults) && accessResults.length > 0) {
           permissionsMap[server.id] = accessResults[0];
         }
       }
-      
+
       // Add permissions to servers
       servers = servers.map(server => {
         return {
@@ -130,21 +130,21 @@ export default async function DashboardPage() {
 
   const activeServers = servers.filter((server: any) => server.status === "ACTIVE");
   const inactiveServers = servers.filter((server: any) => server.status !== "ACTIVE");
-  
+
   // Calculate average health
-  const averageHealth = servers.length > 0 
+  const averageHealth = servers.length > 0
     ? servers.reduce((acc: number, server: any) => {
-        // For this example, assume health is calculated from CPU, memory, and disk usage
-        const metrics = server.healthMetrics[0];
-        if (!metrics) return acc;
-        
-        const healthScore = 100 - (
-          (metrics.cpuUsage || 0) * 0.3 + 
-          (metrics.memoryUsage || 0) * 0.4 + 
-          (metrics.diskUsage || 0) * 0.3
-        );
-        return acc + healthScore;
-      }, 0) / servers.length
+      // For this example, assume health is calculated from CPU, memory, and disk usage
+      const metrics = server.healthMetrics[0];
+      if (!metrics) return acc;
+
+      const healthScore = 100 - (
+        (metrics.cpuUsage || 0) * 0.3 +
+        (metrics.memoryUsage || 0) * 0.4 +
+        (metrics.diskUsage || 0) * 0.3
+      );
+      return acc + healthScore;
+    }, 0) / servers.length
     : 0;
 
   return (
@@ -193,15 +193,15 @@ export default async function DashboardPage() {
           {isAdmin ? (
             <AnimatedServerTable servers={servers} isAdmin={true} />
           ) : (
-            <AnimatedServerTable 
-              servers={servers} 
-              isAdmin={false} 
+            <AnimatedServerTable
+              servers={servers}
+              isAdmin={false}
               userPermissions={
                 Object.fromEntries(
                   servers.map((server: any) => {
                     const access = server.userAccess && server.userAccess.length > 0 ? server.userAccess[0] : null;
                     return [
-                      server.id, 
+                      server.id,
                       {
                         canViewPassword: access?.canViewPassword || false,
                         canViewPrivateKey: access?.canViewPrivateKey || false,

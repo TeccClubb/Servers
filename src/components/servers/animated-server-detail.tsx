@@ -4,15 +4,15 @@ import { useState } from "react";
 import ReactCountryFlag from "react-country-flag";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
-import { 
-  FiServer, 
-  FiGlobe, 
-  FiUser, 
-  FiKey, 
-  FiCalendar, 
-  FiClock, 
-  FiCopy, 
-  FiEye, 
+import {
+  FiServer,
+  FiGlobe,
+  FiUser,
+  FiKey,
+  FiCalendar,
+  FiClock,
+  FiCopy,
+  FiEye,
   FiEyeOff,
   FiCheck,
   FiLock,
@@ -36,14 +36,14 @@ const AnimatedServerDetailView = ({ server, permissions = {} }: AnimatedServerDe
   const [showPassword, setShowPassword] = useState(false);
   const [showPrivateKey, setShowPrivateKey] = useState(false);
   const [copyStatus, setCopyStatus] = useState<Record<string, boolean>>({});
-  
+
   // Check if user has permission to view password and private key
   const canViewPassword = permissions?.canViewPassword || false;
   const canViewPrivateKey = permissions?.canViewPrivateKey || false;
 
   const statusColors = {
     ACTIVE: "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 border-green-200 dark:border-green-700",
-    INACTIVE: "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400 border-red-200 dark:border-red-700", 
+    INACTIVE: "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400 border-red-200 dark:border-red-700",
     MAINTENANCE: "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 border-yellow-200 dark:border-yellow-700",
     UNKNOWN: "bg-gray-100 dark:bg-gray-800/50 text-gray-800 dark:text-gray-400 border-gray-200 dark:border-gray-600",
   };
@@ -69,7 +69,7 @@ const AnimatedServerDetailView = ({ server, permissions = {} }: AnimatedServerDe
       }
     }
   };
-  
+
   const copyToClipboard = (text: string, field: string) => {
     navigator.clipboard.writeText(text)
       .then(() => {
@@ -83,7 +83,7 @@ const AnimatedServerDetailView = ({ server, permissions = {} }: AnimatedServerDe
         toast.error("Failed to copy text");
       });
   };
-  
+
   // No longer need password authentication
 
   return (
@@ -122,9 +122,8 @@ const AnimatedServerDetailView = ({ server, permissions = {} }: AnimatedServerDe
           <motion.div variants={itemVariants} className="flex items-center space-x-3">
             <motion.span
               whileHover={{ scale: 1.05 }}
-              className={`px-4 py-2 text-sm font-semibold rounded-full border ${
-                statusColors[server.status as keyof typeof statusColors]
-              }`}
+              className={`px-4 py-2 text-sm font-semibold rounded-full border ${statusColors[server.status as keyof typeof statusColors]
+                }`}
             >
               {server.status}
             </motion.span>
@@ -142,7 +141,7 @@ const AnimatedServerDetailView = ({ server, permissions = {} }: AnimatedServerDe
             <FiServer className="mr-2 text-blue-600 dark:text-blue-400" />
             Server Information
           </h3>
-          
+
           <motion.div
             whileHover={{ scale: 1.02 }}
             className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 border border-blue-100 dark:border-blue-800"
@@ -208,8 +207,8 @@ const AnimatedServerDetailView = ({ server, permissions = {} }: AnimatedServerDe
                 <ReactCountryFlag
                   countryCode={server.country}
                   svg
-                  style={{ 
-                    width: '100%', 
+                  style={{
+                    width: '100%',
                     height: '100%',
                     objectFit: 'cover'
                   }}
@@ -229,7 +228,7 @@ const AnimatedServerDetailView = ({ server, permissions = {} }: AnimatedServerDe
               Access Information
             </h3>
           </div>
-          
+
           <motion.div
             whileHover={{ scale: 1.02 }}
             className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-4 border border-green-100 dark:border-green-800"
@@ -331,7 +330,7 @@ const AnimatedServerDetailView = ({ server, permissions = {} }: AnimatedServerDe
             <FiClock className="mr-2 text-gray-600 dark:text-gray-400" />
             Timeline
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <motion.div
               whileHover={{ scale: 1.02 }}
@@ -393,7 +392,7 @@ const AnimatedServerDetailView = ({ server, permissions = {} }: AnimatedServerDe
                       </>
                     )}
                   </motion.button>
-                  
+
                   {showPrivateKey && (
                     <motion.button
                       whileHover={{ scale: 1.05 }}
@@ -415,7 +414,7 @@ const AnimatedServerDetailView = ({ server, permissions = {} }: AnimatedServerDe
                 </div>
               )}
             </div>
-            
+
             {!canViewPrivateKey ? (
               <motion.div
                 whileHover={{ scale: 1.01 }}

@@ -45,7 +45,7 @@ const ServerHealthChart = ({ healthMetrics }: ServerHealthChartProps) => {
       (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
 
-    const labels = sortedMetrics.map((metric) => 
+    const labels = sortedMetrics.map((metric) =>
       new Date(metric.timestamp).toLocaleTimeString()
     );
 

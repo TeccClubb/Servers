@@ -30,10 +30,9 @@ const ServerDetailView = ({ server }: ServerDetailViewProps) => {
         <div>
           <h2 className="text-xl font-bold">{server.name}</h2>
           <div className="flex items-center mt-1">
-            <span 
-              className={`px-2 py-1 text-xs inline-flex font-semibold rounded-full ${
-                statusColors[server.status as keyof typeof statusColors]
-              }`}
+            <span
+              className={`px-2 py-1 text-xs inline-flex font-semibold rounded-full ${statusColors[server.status as keyof typeof statusColors]
+                }`}
             >
               {server.status}
             </span>
@@ -100,7 +99,7 @@ const ServerDetailView = ({ server }: ServerDetailViewProps) => {
                 : "Never"}
             </dd>
           </div>
-          
+
           {/* Speed Test Information */}
           {server.speedTests && server.speedTests[0] && (
             <>
@@ -129,7 +128,7 @@ const ServerDetailView = ({ server }: ServerDetailViewProps) => {
               </div>
             </>
           )}
-          
+
           {/* Health Metrics Information */}
           {server.healthMetrics && server.healthMetrics[0] && (
             <>
@@ -145,12 +144,11 @@ const ServerDetailView = ({ server }: ServerDetailViewProps) => {
                     {server.healthMetrics[0].cpuUsage !== null && (
                       <div className="mt-2">
                         <div className="w-full bg-gray-200 rounded-full h-2.5">
-                          <div 
-                            className={`h-2.5 rounded-full ${
-                              server.healthMetrics[0].cpuUsage > 80 ? 'bg-red-600' :
-                              server.healthMetrics[0].cpuUsage > 50 ? 'bg-yellow-500' :
-                              'bg-green-500'
-                            }`}
+                          <div
+                            className={`h-2.5 rounded-full ${server.healthMetrics[0].cpuUsage > 80 ? 'bg-red-600' :
+                                server.healthMetrics[0].cpuUsage > 50 ? 'bg-yellow-500' :
+                                  'bg-green-500'
+                              }`}
                             style={{ width: `${Math.min(100, server.healthMetrics[0].cpuUsage)}%` }}
                           />
                         </div>
@@ -172,12 +170,11 @@ const ServerDetailView = ({ server }: ServerDetailViewProps) => {
                     {server.healthMetrics[0].memoryUsage !== null && (
                       <div className="mt-2">
                         <div className="w-full bg-gray-200 rounded-full h-2.5">
-                          <div 
-                            className={`h-2.5 rounded-full ${
-                              server.healthMetrics[0].memoryUsage > 80 ? 'bg-red-600' :
-                              server.healthMetrics[0].memoryUsage > 50 ? 'bg-yellow-500' :
-                              'bg-green-500'
-                            }`}
+                          <div
+                            className={`h-2.5 rounded-full ${server.healthMetrics[0].memoryUsage > 80 ? 'bg-red-600' :
+                                server.healthMetrics[0].memoryUsage > 50 ? 'bg-yellow-500' :
+                                  'bg-green-500'
+                              }`}
                             style={{ width: `${Math.min(100, server.healthMetrics[0].memoryUsage)}%` }}
                           />
                         </div>
@@ -199,12 +196,11 @@ const ServerDetailView = ({ server }: ServerDetailViewProps) => {
                     {server.healthMetrics[0].diskUsage !== null && (
                       <div className="mt-2">
                         <div className="w-full bg-gray-200 rounded-full h-2.5">
-                          <div 
-                            className={`h-2.5 rounded-full ${
-                              server.healthMetrics[0].diskUsage > 80 ? 'bg-red-600' :
-                              server.healthMetrics[0].diskUsage > 50 ? 'bg-yellow-500' :
-                              'bg-green-500'
-                            }`}
+                          <div
+                            className={`h-2.5 rounded-full ${server.healthMetrics[0].diskUsage > 80 ? 'bg-red-600' :
+                                server.healthMetrics[0].diskUsage > 50 ? 'bg-yellow-500' :
+                                  'bg-green-500'
+                              }`}
                             style={{ width: `${Math.min(100, server.healthMetrics[0].diskUsage)}%` }}
                           />
                         </div>

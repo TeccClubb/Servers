@@ -7,11 +7,11 @@ import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  FiLoader, 
-  FiMail, 
-  FiLock, 
-  FiEye, 
+import {
+  FiLoader,
+  FiMail,
+  FiLock,
+  FiEye,
   FiEyeOff,
   FiShield,
   FiMonitor,
@@ -24,7 +24,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const {
     register,
     handleSubmit,
@@ -39,7 +39,11 @@ export default function LoginPage() {
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
       setIsLoading(true);
-      
+
+      // Get callbackUrl from URL if available
+      const searchParams = new URLSearchParams(window.location.search);
+      const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+
       const result = await signIn("credentials", {
         email: data.email,
         password: data.password,
@@ -51,7 +55,8 @@ export default function LoginPage() {
         return;
       }
 
-      router.push("/dashboard");
+      // Redirect to the callback URL or dashboard
+      router.push(callbackUrl);
       toast.success("Welcome back! 🎉");
     } catch (error) {
       toast.error("Something went wrong");
@@ -115,7 +120,7 @@ export default function LoginPage() {
 
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-purple-600/5" />
-      
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -134,7 +139,7 @@ export default function LoginPage() {
           >
             {/* Gradient Overlay */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-purple-600" />
-            
+
             {/* Header */}
             <motion.div variants={itemVariants} className="text-center mb-8">
               <motion.div
@@ -151,7 +156,7 @@ export default function LoginPage() {
                 Welcome back! Please sign in to continue.
               </p>
             </motion.div>
-            
+
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Email Field */}
               <motion.div variants={itemVariants} className="space-y-2">
@@ -170,7 +175,7 @@ export default function LoginPage() {
                     id="email"
                     type="email"
                     disabled={isLoading}
-                    {...register("email", { 
+                    {...register("email", {
                       required: "Email is required",
                       pattern: {
                         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -195,7 +200,7 @@ export default function LoginPage() {
                   )}
                 </AnimatePresence>
               </motion.div>
-              
+
               {/* Password Field */}
               <motion.div variants={itemVariants} className="space-y-2">
                 <label
@@ -245,7 +250,7 @@ export default function LoginPage() {
                   )}
                 </AnimatePresence>
               </motion.div>
-              
+
               {/* Submit Button */}
               <motion.div variants={itemVariants}>
                 <motion.button
@@ -265,7 +270,7 @@ export default function LoginPage() {
                     </motion.div>
                   )}
                   {isLoading ? "Signing in..." : "Sign In"}
-                  
+
                   {/* Button Shine Effect */}
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
@@ -276,13 +281,13 @@ export default function LoginPage() {
                 </motion.button>
               </motion.div>
             </form>
-            
+
             {/* Footer */}
             <motion.div variants={itemVariants} className="mt-8 text-center">
               <p className="text-sm text-gray-600">
                 Don't have an account?{" "}
-                <Link 
-                  href="/register" 
+                <Link
+                  href="/register"
                   className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200"
                 >
                   Create one here

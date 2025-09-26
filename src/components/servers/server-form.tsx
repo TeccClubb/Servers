@@ -43,7 +43,7 @@ export const ServerForm = ({ initialData, isEditing = false }: ServerFormProps) 
   const onSubmit = async (data: ServerFormValues) => {
     try {
       setIsLoading(true);
-      
+
       if (isEditing && initialData?.id) {
         // Update existing server
         const response = await fetch(`/api/servers/${initialData.id}`, {

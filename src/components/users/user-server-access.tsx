@@ -49,7 +49,7 @@ const UserServerAccess = ({ user, servers, existingAccess }: UserServerAccessPro
   // Initialize server access from existing access
   useEffect(() => {
     const initialAccess: Record<string, any> = {};
-    
+
     // First, set all servers to no access
     servers.forEach(server => {
       initialAccess[server.id] = {
@@ -60,7 +60,7 @@ const UserServerAccess = ({ user, servers, existingAccess }: UserServerAccessPro
         canRunHealthCheck: true,
       };
     });
-    
+
     // Then, apply any existing access settings
     existingAccess.forEach(access => {
       initialAccess[access.serverId] = {
@@ -72,7 +72,7 @@ const UserServerAccess = ({ user, servers, existingAccess }: UserServerAccessPro
         accessId: access.id,
       };
     });
-    
+
     setServerAccess(initialAccess);
   }, [servers, existingAccess]);
 
@@ -103,11 +103,11 @@ const UserServerAccess = ({ user, servers, existingAccess }: UserServerAccessPro
     try {
       // Process server access changes
       const changes: Array<Promise<any>> = [];
-      
+
       // Process each server
       for (const serverId in serverAccess) {
         const access = serverAccess[serverId];
-        
+
         // If server has access
         if (access.hasAccess) {
           // If it's a new access, create it
@@ -154,10 +154,10 @@ const UserServerAccess = ({ user, servers, existingAccess }: UserServerAccessPro
           );
         }
       }
-      
+
       // Execute all changes
       const results = await Promise.all(changes);
-      
+
       // Check if any requests failed
       const failures = results.filter(res => !res.ok);
       if (failures.length > 0) {
@@ -210,7 +210,7 @@ const UserServerAccess = ({ user, servers, existingAccess }: UserServerAccessPro
                   canRunSpeedTest: true,
                   canRunHealthCheck: true,
                 };
-                
+
                 return (
                   <tr key={server.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -229,11 +229,10 @@ const UserServerAccess = ({ user, servers, existingAccess }: UserServerAccessPro
                       <button
                         type="button"
                         onClick={() => toggleAccess(server.id)}
-                        className={`p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                          access.hasAccess
+                        className={`p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 ${access.hasAccess
                             ? "bg-green-100 text-green-800 hover:bg-green-200 focus:ring-green-500 dark:bg-green-900 dark:text-green-200"
                             : "bg-red-100 text-red-800 hover:bg-red-200 focus:ring-red-500 dark:bg-red-900 dark:text-red-200"
-                        }`}
+                          }`}
                       >
                         {access.hasAccess ? (
                           <FiCheck className="h-5 w-5" />
@@ -285,7 +284,7 @@ const UserServerAccess = ({ user, servers, existingAccess }: UserServerAccessPro
           </table>
         </div>
       </div>
-      
+
       <div className="flex justify-end">
         <button
           type="button"

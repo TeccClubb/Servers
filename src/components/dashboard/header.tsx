@@ -41,36 +41,36 @@ const Header = () => {
                 </div>
                 <span className="text-xl font-bold">TecClub Monitor</span>
               </div>
-              <button 
+              <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-gray-500 hover:text-gray-600 dark:text-gray-400"
               >
                 <FiX size={24} />
               </button>
             </div>
-            
+
             <nav className="space-y-3">
-              <Link 
-                href="/dashboard" 
+              <Link
+                href="/dashboard"
                 className="flex items-center px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <FiMonitor className="mr-3 h-5 w-5" />
                 Dashboard
               </Link>
-              
-              <Link 
-                href="/servers" 
+
+              <Link
+                href="/servers"
                 className="flex items-center px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <FiServer className="mr-3 h-5 w-5" />
                 Servers
               </Link>
-              
+
               {session?.user?.role === "ADMIN" && (
-                <Link 
-                  href="/users" 
+                <Link
+                  href="/users"
                   className="flex items-center px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -79,7 +79,7 @@ const Header = () => {
                 </Link>
               )}
             </nav>
-            
+
             <div className="mt-auto pt-6 border-t border-gray-200 dark:border-gray-700 mt-6">
               <button
                 onClick={() => {
@@ -95,7 +95,7 @@ const Header = () => {
           </div>
         </div>
       )}
-      
+
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 md:px-8">
         {/* Mobile menu button */}
         <div className="flex items-center md:hidden">
@@ -132,7 +132,7 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           {/* Theme Toggle */}
           <ThemeToggle />
-          
+
           {/* Notifications */}
           <div className="relative">
             <button

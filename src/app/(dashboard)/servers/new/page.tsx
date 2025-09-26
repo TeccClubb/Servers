@@ -20,7 +20,7 @@ export default async function NewServerPage() {
           Connect and monitor your VPS infrastructure
         </p>
       </AnimatedSection>
-      
+
       <AnimatedSection>
         <AnimatedServerForm />
       </AnimatedSection>

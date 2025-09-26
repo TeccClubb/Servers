@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -70,7 +70,7 @@ export async function PATCH(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -86,9 +86,9 @@ export async function PATCH(
     }
 
     const body = await req.json();
-    
+
     const { name, email, password, role } = body;
-    
+
     // Only admins can update role
     if (role && session.user.role !== "ADMIN") {
       return new NextResponse("Forbidden: Cannot update role", { status: 403 });
@@ -124,7 +124,7 @@ export async function DELETE(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }

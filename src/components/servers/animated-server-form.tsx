@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
-import { 
-  FiLoader, 
-  FiServer, 
-  FiGlobe, 
-  FiUser, 
-  FiKey, 
+import {
+  FiLoader,
+  FiServer,
+  FiGlobe,
+  FiUser,
+  FiKey,
   FiFlag,
   FiCheck,
   FiX,
@@ -61,7 +61,7 @@ export const AnimatedServerForm = ({ initialData, isEditing = false }: AnimatedS
   const onSubmit = async (data: ServerFormValues) => {
     try {
       setIsLoading(true);
-      
+
       if (isEditing && initialData?.id) {
         const response = await fetch(`/api/servers/${initialData.id}`, {
           method: "PATCH",
@@ -140,23 +140,20 @@ export const AnimatedServerForm = ({ initialData, isEditing = false }: AnimatedS
             <div key={step.number} className="flex items-center">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-colors duration-300 ${
-                  currentStep >= step.number
+                className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-colors duration-300 ${currentStep >= step.number
                     ? 'bg-blue-600 border-blue-600 text-white'
                     : 'bg-white border-gray-300 text-gray-400'
-                }`}
+                  }`}
               >
                 <step.icon className="w-5 h-5" />
               </motion.div>
               <div className="ml-3">
-                <p className={`text-sm font-medium ${
-                  currentStep >= step.number ? 'text-blue-600' : 'text-gray-400'
-                }`}>
+                <p className={`text-sm font-medium ${currentStep >= step.number ? 'text-blue-600' : 'text-gray-400'
+                  }`}>
                   Step {step.number}
                 </p>
-                <p className={`text-xs ${
-                  currentStep >= step.number ? 'text-gray-900' : 'text-gray-400'
-                }`}>
+                <p className={`text-xs ${currentStep >= step.number ? 'text-gray-900' : 'text-gray-400'
+                  }`}>
                   {step.title}
                 </p>
               </div>
@@ -236,7 +233,7 @@ export const AnimatedServerForm = ({ initialData, isEditing = false }: AnimatedS
                   </motion.p>
                 )}
               </motion.div>
-              
+
               {/* Domain Field */}
               <motion.div
                 whileHover={{ scale: 1.02 }}

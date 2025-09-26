@@ -16,7 +16,7 @@ interface ServerActionsProps {
   };
 }
 
-const ServerActions = ({ 
+const ServerActions = ({
   serverId,
   permissions = {
     canRunSpeedTest: true,
@@ -29,9 +29,9 @@ const ServerActions = ({
       {permissions.canRunHealthCheck && (
         <RunServerHealthCheckButton serverId={serverId} />
       )}
-      
+
       {permissions.canRunSpeedTest && (
-        <Link 
+        <Link
           href={`/servers/${serverId}/speedtest`}
           className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
         >
@@ -39,17 +39,17 @@ const ServerActions = ({
           Run Speed Test
         </Link>
       )}
-      
+
       {permissions.isAdmin && (
         <>
-          <Link 
+          <Link
             href={`/servers/${serverId}/edit`}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
           >
             <FiEdit className="mr-2" />
             Edit
           </Link>
-          <Link 
+          <Link
             href={`/servers/${serverId}/delete`}
             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
           >

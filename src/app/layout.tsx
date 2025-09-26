@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <AuthProvider>
-            <Toaster 
+            <Toaster
               position="top-center"
               toastOptions={{
                 className: 'dark:bg-gray-800 dark:text-gray-200',

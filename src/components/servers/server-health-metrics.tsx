@@ -27,10 +27,10 @@ const ServerHealthMetrics = ({ healthMetrics }: ServerHealthMetricsProps) => {
       </div>
     );
   }
-  
+
   // Calculate overall health score (based on uptime field or calculate from metrics)
-  const overallHealthScore = latestMetric.uptime !== null && latestMetric.uptime !== undefined 
-    ? latestMetric.uptime 
+  const overallHealthScore = latestMetric.uptime !== null && latestMetric.uptime !== undefined
+    ? latestMetric.uptime
     : 100 - ((latestMetric.cpuUsage || 0) * 0.3 + (latestMetric.memoryUsage || 0) * 0.4 + (latestMetric.diskUsage || 0) * 0.3);
 
   const getHealthColor = (value: number | null | undefined) => {
@@ -49,7 +49,7 @@ const ServerHealthMetrics = ({ healthMetrics }: ServerHealthMetricsProps) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
       <h2 className="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">Health Metrics</h2>
-      
+
       {/* Overall Health Score */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
@@ -59,12 +59,11 @@ const ServerHealthMetrics = ({ healthMetrics }: ServerHealthMetricsProps) => {
           </span>
         </div>
         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-          <div 
-            className={`h-3 rounded-full ${
-              overallHealthScore >= 80 ? 'bg-green-500' :
-              overallHealthScore >= 50 ? 'bg-yellow-500' :
-              'bg-red-600'
-            }`}
+          <div
+            className={`h-3 rounded-full ${overallHealthScore >= 80 ? 'bg-green-500' :
+                overallHealthScore >= 50 ? 'bg-yellow-500' :
+                  'bg-red-600'
+              }`}
             style={{ width: `${Math.min(100, overallHealthScore)}%` }}
           />
         </div>
@@ -89,9 +88,9 @@ const ServerHealthMetrics = ({ healthMetrics }: ServerHealthMetricsProps) => {
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
+            <div
               className={getHealthColor(latestMetric.cpuUsage)}
-              style={{ 
+              style={{
                 width: `${Math.min(100, latestMetric.cpuUsage || 0)}%`,
                 height: '8px',
                 borderRadius: '4px'
@@ -118,9 +117,9 @@ const ServerHealthMetrics = ({ healthMetrics }: ServerHealthMetricsProps) => {
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
+            <div
               className={getHealthColor(latestMetric.memoryUsage)}
-              style={{ 
+              style={{
                 width: `${Math.min(100, latestMetric.memoryUsage || 0)}%`,
                 height: '8px',
                 borderRadius: '4px'
@@ -147,9 +146,9 @@ const ServerHealthMetrics = ({ healthMetrics }: ServerHealthMetricsProps) => {
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
+            <div
               className={getHealthColor(latestMetric.diskUsage)}
-              style={{ 
+              style={{
                 width: `${Math.min(100, latestMetric.diskUsage || 0)}%`,
                 height: '8px',
                 borderRadius: '4px'
@@ -162,7 +161,7 @@ const ServerHealthMetrics = ({ healthMetrics }: ServerHealthMetricsProps) => {
             <span>100%</span>
           </div>
         </div>
-        
+
         <div className="text-xs text-gray-500 mt-4">
           Last updated: {new Date(latestMetric.timestamp).toLocaleString()}
         </div>

@@ -9,10 +9,10 @@ import { formatDistanceToNow } from "date-fns";
 import ReactCountryFlag from "react-country-flag";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
-import { 
-  FiCheck, 
-  FiAlertTriangle, 
-  FiX, 
+import {
+  FiCheck,
+  FiAlertTriangle,
+  FiX,
   FiHelpCircle,
 } from "react-icons/fi";
 import DeleteConfirmationModal from "@/components/ui/delete-confirmation-modal";
@@ -48,32 +48,32 @@ const AnimatedServerTable = ({ servers, isAdmin = false, userPermissions = {} }:
   const [deleteServerId, setDeleteServerId] = useState<string | null>(null);
   const [serverToDelete, setServerToDelete] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const openDeleteModal = (server: any) => {
     setServerToDelete(server);
     setDeleteServerId(server.id);
     setIsDeleting(true);
   };
-  
+
   const closeDeleteModal = () => {
     setIsDeleting(false);
     setServerToDelete(null);
     setDeleteServerId(null);
   };
-  
+
   const handleDelete = async () => {
     if (!deleteServerId) return;
-    
+
     try {
       setIsLoading(true);
       const response = await fetch(`/api/servers/${deleteServerId}`, {
         method: "DELETE",
       });
-      
+
       if (!response.ok) {
         throw new Error("Failed to delete server");
       }
-      
+
       toast.success("Server deleted successfully");
       closeDeleteModal();
       router.refresh();
@@ -84,7 +84,7 @@ const AnimatedServerTable = ({ servers, isAdmin = false, userPermissions = {} }:
       setIsLoading(false);
     }
   };
-  
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full">
@@ -176,24 +176,23 @@ const AnimatedServerTable = ({ servers, isAdmin = false, userPermissions = {} }:
                     </div>
                   </div>
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="text-sm text-gray-600 dark:text-gray-400 font-mono bg-gray-50 dark:bg-gray-700 px-2 py-1 rounded">
                     {server.ip}
                   </span>
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap">
                   <motion.span
                     whileHover={{ scale: 1.05 }}
-                    className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${
-                      statusColors[server.status as keyof typeof statusColors] || statusColors.UNKNOWN
-                    }`}
+                    className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${statusColors[server.status as keyof typeof statusColors] || statusColors.UNKNOWN
+                      }`}
                   >
                     {server.status}
                   </motion.span>
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center justify-center">
                     <motion.div
@@ -204,27 +203,25 @@ const AnimatedServerTable = ({ servers, isAdmin = false, userPermissions = {} }:
                     </motion.div>
                   </div>
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap">
                   {server.healthMetrics && server.healthMetrics[0] && server.healthMetrics[0].uptime !== undefined ? (
                     <div className="flex items-center space-x-2">
                       <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <motion.div 
+                        <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${Math.min(100, server.healthMetrics[0].uptime)}%` }}
                           transition={{ duration: 1, delay: index * 0.1 }}
-                          className={`h-2 rounded-full ${
-                            server.healthMetrics[0].uptime >= 90 ? 'bg-green-500' :
-                            server.healthMetrics[0].uptime >= 70 ? 'bg-yellow-500' :
-                            'bg-red-500'
-                          }`}
+                          className={`h-2 rounded-full ${server.healthMetrics[0].uptime >= 90 ? 'bg-green-500' :
+                              server.healthMetrics[0].uptime >= 70 ? 'bg-yellow-500' :
+                                'bg-red-500'
+                            }`}
                         />
                       </div>
-                      <span className={`text-sm font-semibold ${
-                        server.healthMetrics[0].uptime >= 90 ? 'text-green-600 dark:text-green-400' :
-                        server.healthMetrics[0].uptime >= 70 ? 'text-yellow-600 dark:text-yellow-400' :
-                        'text-red-600 dark:text-red-400'
-                      }`}>
+                      <span className={`text-sm font-semibold ${server.healthMetrics[0].uptime >= 90 ? 'text-green-600 dark:text-green-400' :
+                          server.healthMetrics[0].uptime >= 70 ? 'text-yellow-600 dark:text-yellow-400' :
+                            'text-red-600 dark:text-red-400'
+                        }`}>
                         {server.healthMetrics[0].uptime.toFixed(1)}
                       </span>
                     </div>
@@ -232,15 +229,15 @@ const AnimatedServerTable = ({ servers, isAdmin = false, userPermissions = {} }:
                     <span className="text-gray-400 dark:text-gray-500 text-sm">N/A</span>
                   )}
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                   {server.lastChecked
                     ? formatDistanceToNow(new Date(server.lastChecked), {
-                        addSuffix: true,
-                      })
+                      addSuffix: true,
+                    })
                     : "Never"}
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                   {server.speedTests && server.speedTests[0] && server.speedTests[0].downloadSpeed
                     ? (
@@ -253,7 +250,7 @@ const AnimatedServerTable = ({ servers, isAdmin = false, userPermissions = {} }:
                     )
                     : "Not tested"}
                 </td>
-                
+
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex items-center justify-end space-x-2">
                     {/* Show Speed Test button only if admin or user has permission */}
@@ -268,7 +265,7 @@ const AnimatedServerTable = ({ servers, isAdmin = false, userPermissions = {} }:
                         </Link>
                       </motion.div>
                     )}
-                    
+
                     {/* Details button is visible to all users with access */}
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Link
@@ -279,11 +276,11 @@ const AnimatedServerTable = ({ servers, isAdmin = false, userPermissions = {} }:
                         Details
                       </Link>
                     </motion.div>
-                    
+
                     {/* Delete button only shown to admins */}
                     {isAdmin && (
-                      <motion.div 
-                        whileHover={{ scale: 1.05 }} 
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
                         <button

@@ -13,17 +13,17 @@ interface AnimatedMetricCardProps {
   delay?: number;
 }
 
-const AnimatedMetricCard = ({ 
-  title, 
-  value, 
-  icon, 
-  color, 
-  change, 
+const AnimatedMetricCard = ({
+  title,
+  value,
+  icon,
+  color,
+  change,
   changeType = 'neutral',
-  delay = 0 
+  delay = 0
 }: AnimatedMetricCardProps) => {
-  const changeColor = changeType === 'positive' ? 'text-green-600 dark:text-green-400' : 
-                     changeType === 'negative' ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400';
+  const changeColor = changeType === 'positive' ? 'text-green-600 dark:text-green-400' :
+    changeType === 'negative' ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400';
 
   return (
     <motion.div
@@ -86,7 +86,7 @@ const DashboardMetrics = ({
         changeType="positive"
         delay={0}
       />
-      
+
       <AnimatedMetricCard
         title="Active Servers"
         value={activeServers}
@@ -96,7 +96,7 @@ const DashboardMetrics = ({
         changeType="positive"
         delay={0.1}
       />
-      
+
       <AnimatedMetricCard
         title="Inactive Servers"
         value={inactiveServers}
@@ -106,7 +106,7 @@ const DashboardMetrics = ({
         changeType={inactiveServers === 0 ? "positive" : "negative"}
         delay={0.2}
       />
-      
+
       <AnimatedMetricCard
         title="Average Health"
         value={`${averageHealth.toFixed(1)}%`}

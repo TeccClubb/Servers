@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -27,7 +27,7 @@ export async function GET(
     if (!user) {
       return new NextResponse("User not found", { status: 404 });
     }
-    
+
     // Get server information
     const server = await prismadb.server.findUnique({
       where: {
@@ -56,7 +56,7 @@ export async function GET(
     // Check for admin access
     // The User model in the database may or may not have the role field yet
     const isAdmin = 'role' in user && user.role === "ADMIN";
-    
+
     if (isAdmin) {
       // Admin gets full access
       return NextResponse.json({
@@ -79,7 +79,7 @@ export async function GET(
         AND "serverId" = ${params.serverId}
         LIMIT 1
       `;
-      
+
       // If we have access records, use those permissions
       if (Array.isArray(serverAccess) && serverAccess.length > 0) {
         const access = serverAccess[0] as any;
@@ -96,7 +96,7 @@ export async function GET(
       // If the table doesn't exist yet, we'll get an error
       console.warn("ServerAccess table might not exist yet:", error);
     }
-    
+
     // Default: no specific permissions set, provide read-only access
     return NextResponse.json({
       ...server,
@@ -118,7 +118,7 @@ export async function PATCH(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -140,13 +140,13 @@ export async function PATCH(
 
     // Only admins can update server details
     const isAdmin = 'role' in user && user.role === "ADMIN";
-    
+
     if (!isAdmin) {
       return new NextResponse("Permission denied", { status: 403 });
     }
 
     const body = await req.json();
-    
+
     const { name, ip, domain, country, username, password, privateKey, status } = body;
 
     const server = await prismadb.server.update({
@@ -178,7 +178,7 @@ export async function DELETE(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -200,7 +200,7 @@ export async function DELETE(
 
     // Only admins can delete servers
     const isAdmin = 'role' in user && user.role === "ADMIN";
-    
+
     if (!isAdmin) {
       return new NextResponse("Permission denied", { status: 403 });
     }

@@ -3,11 +3,11 @@ import { FiExternalLink } from "react-icons/fi";
 import { RiSpeedMiniLine } from "react-icons/ri";
 import { formatDistanceToNow } from "date-fns";
 import ReactCountryFlag from "react-country-flag";
-import { 
-  FiCheck, 
-  FiAlertTriangle, 
-  FiX, 
-  FiHelpCircle 
+import {
+  FiCheck,
+  FiAlertTriangle,
+  FiX,
+  FiHelpCircle
 } from "react-icons/fi";
 
 interface ServerTableProps {
@@ -123,9 +123,8 @@ const ServerTable = ({ servers, isAdmin = false, userPermissions = {} }: ServerT
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      statusColors[server.status as keyof typeof statusColors] || statusColors.UNKNOWN
-                    }`}
+                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[server.status as keyof typeof statusColors] || statusColors.UNKNOWN
+                      }`}
                   >
                     {server.status}
                   </span>
@@ -139,19 +138,18 @@ const ServerTable = ({ servers, isAdmin = false, userPermissions = {} }: ServerT
                   {server.healthMetrics && server.healthMetrics[0] && server.healthMetrics[0].uptime !== undefined ? (
                     <div className="flex items-center">
                       <div className="w-16 bg-gray-200 rounded-full h-2.5 mr-2">
-                        <div 
-                          className={`h-2.5 rounded-full ${
-                            server.healthMetrics[0].uptime >= 90 ? 'bg-green-500' :
-                            server.healthMetrics[0].uptime >= 70 ? 'bg-yellow-500' :
-                            'bg-red-500'
-                          }`}
+                        <div
+                          className={`h-2.5 rounded-full ${server.healthMetrics[0].uptime >= 90 ? 'bg-green-500' :
+                              server.healthMetrics[0].uptime >= 70 ? 'bg-yellow-500' :
+                                'bg-red-500'
+                            }`}
                           style={{ width: `${Math.min(100, server.healthMetrics[0].uptime)}%` }}
                         />
                       </div>
                       <span className={
                         server.healthMetrics[0].uptime >= 90 ? 'text-green-600' :
-                        server.healthMetrics[0].uptime >= 70 ? 'text-yellow-600' :
-                        'text-red-600'
+                          server.healthMetrics[0].uptime >= 70 ? 'text-yellow-600' :
+                            'text-red-600'
                       }>
                         {server.healthMetrics[0].uptime.toFixed(1)}
                       </span>
@@ -163,8 +161,8 @@ const ServerTable = ({ servers, isAdmin = false, userPermissions = {} }: ServerT
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {server.lastChecked
                     ? formatDistanceToNow(new Date(server.lastChecked), {
-                        addSuffix: true,
-                      })
+                      addSuffix: true,
+                    })
                     : "Never"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

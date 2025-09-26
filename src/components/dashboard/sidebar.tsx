@@ -5,7 +5,7 @@ import { signOut, auth } from "@/lib/auth";
 const Sidebar = async () => {
   const session = await auth();
   const isAdmin = session?.user?.role === "ADMIN";
-  
+
   const routes = [
     {
       href: "/dashboard",

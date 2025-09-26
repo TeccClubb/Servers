@@ -29,8 +29,8 @@ const ThemeToggle = () => {
         onClick={cycleTheme}
         className={`
           relative p-2 rounded-lg transition-all duration-200 
-          ${effectiveTheme === 'dark' 
-            ? 'bg-gray-800 text-gray-200 hover:bg-gray-700 border border-gray-700' 
+          ${effectiveTheme === 'dark'
+            ? 'bg-gray-800 text-gray-200 hover:bg-gray-700 border border-gray-700'
             : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 shadow-sm'
           }
         `}
@@ -50,13 +50,13 @@ const ThemeToggle = () => {
             <CurrentIcon className="w-5 h-5" />
           </motion.div>
         </AnimatePresence>
-        
+
         {/* Tooltip */}
         <div className={`
           absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 
           text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none
-          ${effectiveTheme === 'dark' 
-            ? 'bg-gray-900 text-gray-200 border border-gray-700' 
+          ${effectiveTheme === 'dark'
+            ? 'bg-gray-900 text-gray-200 border border-gray-700'
             : 'bg-gray-900 text-white'
           }
         `}>

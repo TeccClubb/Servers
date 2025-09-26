@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 export async function GET(req: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    
+
     const { name, email, password, role = "USER" } = body;
 
     if (!name || !email || !password) {
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
 
     // Return the user without the password
     const { hashedPassword: _, ...userWithoutPassword } = user;
-    
+
     return NextResponse.json(userWithoutPassword);
   } catch (error) {
     console.error("[USERS_POST]", error);

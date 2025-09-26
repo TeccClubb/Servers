@@ -22,7 +22,7 @@ export default async function UserRolePage({ params }: UserRolePageProps) {
       email: session.user?.email!
     }
   });
-  
+
   if (!currentUser || !('role' in currentUser) || currentUser.role !== "ADMIN") {
     redirect("/dashboard");
   }

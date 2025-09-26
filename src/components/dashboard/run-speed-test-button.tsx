@@ -16,18 +16,18 @@ export default function RunSpeedTestButton({ className = "" }: RunSpeedTestButto
     try {
       setIsLoading(true);
       toast.loading("Running speed tests on all servers...", { id: "speedtest" });
-      
+
       const response = await fetch("/api/servers/speedtest-all", {
         method: "POST",
       });
-      
+
       if (!response.ok) {
         throw new Error("Failed to run speed test");
       }
 
       const result = await response.json();
       toast.success(`Speed test completed for ${result.completed} servers!`, { id: "speedtest" });
-      
+
       // Reload the page to show updated data
       window.location.reload();
     } catch (error) {

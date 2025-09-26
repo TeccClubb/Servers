@@ -74,11 +74,10 @@ const UsersList = ({ users }: UsersListProps) => {
                   <div className="text-sm text-gray-900 dark:text-gray-100">{user.email}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    user.role === "ADMIN" 
-                      ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200" 
+                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.role === "ADMIN"
+                      ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
                       : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                  }`}>
+                    }`}>
                     {user.role || "USER"}
                   </span>
                 </td>
@@ -86,21 +85,21 @@ const UsersList = ({ users }: UsersListProps) => {
                   {new Date(user.createdAt).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                  <Link 
+                  <Link
                     href={`/users/${user.id}/servers`}
                     className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 inline-flex items-center"
                   >
-                    <FiServer className="mr-1" /> 
+                    <FiServer className="mr-1" />
                     Servers
                   </Link>
-                  <Link 
+                  <Link
                     href={`/users/${user.id}/edit`}
                     className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 inline-flex items-center"
                   >
                     <FiEdit className="mr-1" />
                     Edit
                   </Link>
-                  <Link 
+                  <Link
                     href={`/users/${user.id}/role`}
                     className="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300 inline-flex items-center"
                   >

@@ -23,9 +23,9 @@ export async function POST(req: NextRequest) {
 
         // Check if user is admin
         const isAdmin = user.role === "ADMIN";
-        
+
         let servers;
-        
+
         // Admins can access all servers
         if (isAdmin) {
             servers = await prismadb.server.findMany({
@@ -45,10 +45,10 @@ export async function POST(req: NextRequest) {
                     serverId: true
                 }
             });
-            
+
             // Get the list of server IDs the user has access to
             const serverIds = serverAccesses.map(access => access.serverId);
-            
+
             // Get the servers the user has access to
             servers = await prismadb.server.findMany({
                 where: {

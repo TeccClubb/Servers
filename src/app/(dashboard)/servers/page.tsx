@@ -18,15 +18,15 @@ export default async function ServersPage() {
       email: session.user?.email!
     }
   });
-  
+
   if (!user) {
     redirect("/login");
   }
-  
+
   const isAdmin = 'role' in user && user.role === "ADMIN";
-  
+
   let servers: any[] = [];
-  
+
   if (isAdmin) {
     // Admin can see all servers
     servers = await prismadb.server.findMany({
@@ -50,7 +50,7 @@ export default async function ServersPage() {
     try {
       // First, get the user's server access permissions
       let userServerIds = [];
-      
+
       if ('serverAccess' in prismadb) {
         // @ts-ignore - The model exists in the DB but might not be in TS types yet
         const serverAccess = await prismadb.serverAccess.findMany({
@@ -68,12 +68,12 @@ export default async function ServersPage() {
           SELECT "serverId" FROM "ServerAccess"
           WHERE "userId" = ${user.id}
         `;
-        
+
         if (Array.isArray(results)) {
           userServerIds = results.map((result: any) => result.serverId);
         }
       }
-      
+
       // Then, get only the servers the user has access to
       servers = await prismadb.server.findMany({
         where: {
@@ -96,10 +96,10 @@ export default async function ServersPage() {
           }
         }
       }) as any[];
-      
+
       // Create a permissions map
       const permissionsMap: Record<string, any> = {};
-      
+
       // For each server, get permissions from raw SQL
       for (const server of servers) {
         const accessResults = await prismadb.$queryRaw`
@@ -107,12 +107,12 @@ export default async function ServersPage() {
           FROM "ServerAccess"
           WHERE "userId" = ${user.id} AND "serverId" = ${server.id}
         `;
-        
+
         if (Array.isArray(accessResults) && accessResults.length > 0) {
           permissionsMap[server.id] = accessResults[0];
         }
       }
-      
+
       // Add permissions to servers
       servers = servers.map(server => {
         return {
@@ -136,8 +136,8 @@ export default async function ServersPage() {
           </p>
         </div>
         {isAdmin && (
-          <Link 
-            href="/servers/new" 
+          <Link
+            href="/servers/new"
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
           >
             <FiPlusCircle className="mr-2" />
@@ -150,15 +150,15 @@ export default async function ServersPage() {
           {isAdmin ? (
             <ServerTable servers={servers} isAdmin={true} />
           ) : (
-            <ServerTable 
-              servers={servers} 
-              isAdmin={false} 
+            <ServerTable
+              servers={servers}
+              isAdmin={false}
               userPermissions={
                 Object.fromEntries(
                   servers.map(server => {
                     const access = server.userAccess && server.userAccess.length > 0 ? server.userAccess[0] : null;
                     return [
-                      server.id, 
+                      server.id,
                       {
                         canViewPassword: access?.canViewPassword || false,
                         canViewPrivateKey: access?.canViewPrivateKey || false,

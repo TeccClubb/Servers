@@ -22,7 +22,7 @@ export default async function UserEditPage({ params }: UserEditPageProps) {
       email: session.user?.email!
     }
   });
-  
+
   if (!currentUser || (currentUser.role !== "ADMIN")) {
     redirect("/dashboard");
   }
@@ -49,7 +49,7 @@ export default async function UserEditPage({ params }: UserEditPageProps) {
         </p>
       </div>
 
-      <UserForm 
+      <UserForm
         user={user}
         action="update"
       />

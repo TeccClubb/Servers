@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   // Create a test user
   const hashedPassword = await bcrypt.hash('password123', 12);
-  
+
   const user = await prisma.user.upsert({
     where: { email: 'admin@example.com' },
     update: {},
@@ -16,12 +16,12 @@ async function main() {
       hashedPassword,
     },
   });
-  
+
   console.log('Created test user:', user);
 
   // Create real servers from the provided list
   console.log('Creating VPS servers...');
-  
+
   const serversList = [
     {
       name: 'Canada',
@@ -204,7 +204,7 @@ async function main() {
       status: 'UNKNOWN'
     }
   ];
-  
+
   // Create each server
   for (const serverData of serversList) {
     await prisma.server.create({

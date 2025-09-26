@@ -24,11 +24,11 @@ export default async function ServerSpeedTestPage({ params }: ServerSpeedTestPag
       email: session.user?.email!
     }
   });
-  
+
   if (!user) {
     redirect("/login");
   }
-  
+
   const isAdmin = 'role' in user && user.role === "ADMIN";
 
   // Get the server data
@@ -41,10 +41,10 @@ export default async function ServerSpeedTestPage({ params }: ServerSpeedTestPag
   if (!server) {
     redirect("/servers");
   }
-  
+
   // Check for user's access permissions for this server
   let canRunSpeedTest = isAdmin; // Admins can always run speed tests
-  
+
   // If not admin, check for specific permissions
   if (!isAdmin) {
     try {
@@ -58,7 +58,7 @@ export default async function ServerSpeedTestPage({ params }: ServerSpeedTestPag
             }
           }
         });
-        
+
         canRunSpeedTest = serverAccess ? !!serverAccess.canRunSpeedTest : false;
       } else {
         // Fallback to raw SQL
@@ -68,14 +68,14 @@ export default async function ServerSpeedTestPage({ params }: ServerSpeedTestPag
           AND "serverId" = ${serverId}
           LIMIT 1
         `;
-        
+
         canRunSpeedTest = Array.isArray(results) && results.length > 0 && results[0].canRunSpeedTest;
       }
     } catch (error) {
       console.error("Error fetching server access permissions:", error);
     }
   }
-  
+
   // Redirect if user doesn't have permission
   if (!canRunSpeedTest) {
     redirect(`/servers/${serverId}`);

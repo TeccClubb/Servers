@@ -6,7 +6,7 @@ import prismadb from "@/lib/prismadb";
 export async function GET(req: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -15,20 +15,20 @@ export async function GET(req: NextRequest) {
     const user = await prismadb.user.findUnique({
       where: { email: session.user?.email! }
     });
-    
+
     if (!user) {
       return new NextResponse("User not found", { status: 404 });
     }
-    
+
     const isAdmin = 'role' in user && user.role === "ADMIN";
-    
+
     if (!isAdmin) {
       return new NextResponse("Forbidden: Admin access required", { status: 403 });
     }
 
     // Try to use the Prisma client model if it exists
     let serverAccess;
-    
+
     try {
       // Check if serverAccess model is available
       if ('serverAccess' in prismadb) {
@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -89,26 +89,26 @@ export async function POST(req: NextRequest) {
     const currentUser = await prismadb.user.findUnique({
       where: { email: session.user?.email! }
     });
-    
+
     if (!currentUser) {
       return new NextResponse("User not found", { status: 404 });
     }
-    
+
     const isAdmin = 'role' in currentUser && currentUser.role === "ADMIN";
-    
+
     if (!isAdmin) {
       return new NextResponse("Forbidden: Admin access required", { status: 403 });
     }
 
     const body = await req.json();
-    
-    const { 
-      userId, 
-      serverId, 
-      canViewPassword = false, 
-      canViewPrivateKey = false, 
-      canRunSpeedTest = true, 
-      canRunHealthCheck = true 
+
+    const {
+      userId,
+      serverId,
+      canViewPassword = false,
+      canViewPrivateKey = false,
+      canRunSpeedTest = true,
+      canRunHealthCheck = true
     } = body;
 
     if (!userId || !serverId) {
@@ -131,7 +131,7 @@ export async function POST(req: NextRequest) {
     // Check if this access already exists
     let existingAccess = null;
     let serverAccess = null;
-    
+
     try {
       // Try to use Prisma client if available
       if ('serverAccess' in prismadb) {
@@ -142,11 +142,11 @@ export async function POST(req: NextRequest) {
             serverId
           }
         });
-        
+
         if (existingAccess) {
           return new NextResponse("Access already exists", { status: 400 });
         }
-        
+
         // @ts-ignore
         serverAccess = await prismadb.serverAccess.create({
           data: {
@@ -182,11 +182,11 @@ export async function POST(req: NextRequest) {
           WHERE "userId" = ${userId} AND "serverId" = ${serverId}
           LIMIT 1
         `;
-        
+
         if (Array.isArray(checkAccess) && checkAccess.length > 0) {
           return new NextResponse("Access already exists", { status: 400 });
         }
-        
+
         // Use raw SQL to create the access
         await prismadb.$executeRaw`
           INSERT INTO "ServerAccess" 
@@ -194,7 +194,7 @@ export async function POST(req: NextRequest) {
           VALUES 
           (uuid(), ${userId}, ${serverId}, ${canViewPassword}, ${canViewPrivateKey}, ${canRunSpeedTest}, ${canRunHealthCheck}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
         `;
-        
+
         // Fetch the created record
         serverAccess = await prismadb.$queryRaw`
           SELECT sa.*, 
@@ -210,7 +210,7 @@ export async function POST(req: NextRequest) {
     } catch (error) {
       // Table might not exist, try to create it
       console.error("Error with ServerAccess operations:", error);
-      
+
       try {
         // Create the table if it doesn't exist
         await prismadb.$executeRaw`
@@ -229,7 +229,7 @@ export async function POST(req: NextRequest) {
             CONSTRAINT "ServerAccess_serverId_fkey" FOREIGN KEY ("serverId") REFERENCES "Server" ("id") ON DELETE CASCADE ON UPDATE CASCADE
           )
         `;
-        
+
         // Now try to insert the record
         await prismadb.$executeRaw`
           INSERT INTO "ServerAccess" 
@@ -237,7 +237,7 @@ export async function POST(req: NextRequest) {
           VALUES 
           (uuid(), ${userId}, ${serverId}, ${canViewPassword}, ${canViewPrivateKey}, ${canRunSpeedTest}, ${canRunHealthCheck}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
         `;
-        
+
         // And fetch it
         serverAccess = await prismadb.$queryRaw`
           SELECT sa.*, 

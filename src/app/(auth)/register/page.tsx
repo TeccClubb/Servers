@@ -10,7 +10,7 @@ import { FiLoader } from "react-icons/fi";
 export default function RegisterPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const {
     register,
     handleSubmit,
@@ -30,7 +30,7 @@ export default function RegisterPage() {
   const onSubmit = async (data: { name: string; email: string; password: string }) => {
     try {
       setIsLoading(true);
-      
+
       const response = await fetch("/api/register", {
         method: "POST",
         headers: {
@@ -64,7 +64,7 @@ export default function RegisterPage() {
           <h1 className="text-3xl font-bold">TecClub Monitor</h1>
           <p className="text-gray-600 mt-2">Create a new account</p>
         </div>
-        
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-2">
             <label
@@ -84,7 +84,7 @@ export default function RegisterPage() {
               <p className="text-sm text-red-500">{errors.name.message}</p>
             )}
           </div>
-          
+
           <div className="space-y-2">
             <label
               htmlFor="email"
@@ -96,7 +96,7 @@ export default function RegisterPage() {
               id="email"
               type="email"
               disabled={isLoading}
-              {...register("email", { 
+              {...register("email", {
                 required: "Email is required",
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -109,7 +109,7 @@ export default function RegisterPage() {
               <p className="text-sm text-red-500">{errors.email.message}</p>
             )}
           </div>
-          
+
           <div className="space-y-2">
             <label
               htmlFor="password"
@@ -121,7 +121,7 @@ export default function RegisterPage() {
               id="password"
               type="password"
               disabled={isLoading}
-              {...register("password", { 
+              {...register("password", {
                 required: "Password is required",
                 minLength: {
                   value: 8,
@@ -134,7 +134,7 @@ export default function RegisterPage() {
               <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
           </div>
-          
+
           <div className="space-y-2">
             <label
               htmlFor="confirmPassword"
@@ -146,7 +146,7 @@ export default function RegisterPage() {
               id="confirmPassword"
               type="password"
               disabled={isLoading}
-              {...register("confirmPassword", { 
+              {...register("confirmPassword", {
                 required: "Please confirm your password",
                 validate: value => value === password || "Passwords do not match"
               })}
@@ -156,7 +156,7 @@ export default function RegisterPage() {
               <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
             )}
           </div>
-          
+
           <div>
             <button
               type="submit"
@@ -168,7 +168,7 @@ export default function RegisterPage() {
             </button>
           </div>
         </form>
-        
+
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             Already have an account?{" "}

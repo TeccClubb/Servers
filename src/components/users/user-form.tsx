@@ -31,14 +31,14 @@ const UserForm = ({ user, action }: UserFormProps) => {
     setIsLoading(true);
 
     try {
-      const url = action === "create" 
-        ? "/api/users" 
+      const url = action === "create"
+        ? "/api/users"
         : `/api/users/${user?.id}`;
-      
+
       const method = action === "create" ? "POST" : "PATCH";
 
       const body: any = { name, email };
-      
+
       // Only include password if it's set (for updates) or if creating a new user
       if (password) {
         body.password = password;

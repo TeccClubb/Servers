@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -18,13 +18,13 @@ export async function GET(
     const user = await prismadb.user.findUnique({
       where: { email: session.user?.email! }
     });
-    
+
     if (!user) {
       return new NextResponse("User not found", { status: 404 });
     }
-    
+
     const isAdmin = 'role' in user && user.role === "ADMIN";
-    
+
     if (!isAdmin) {
       return new NextResponse("Forbidden: Admin access required", { status: 403 });
     }
@@ -35,7 +35,7 @@ export async function GET(
 
     // Try to use Prisma client if available
     let serverAccess = null;
-    
+
     try {
       if ('serverAccess' in prismadb) {
         // @ts-ignore
@@ -73,7 +73,7 @@ export async function GET(
           WHERE sa.id = ${params.accessId}
           LIMIT 1
         `;
-        
+
         if (Array.isArray(results) && results.length > 0) {
           const result = results[0] as any;
           serverAccess = {
@@ -114,7 +114,7 @@ export async function PATCH(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -123,13 +123,13 @@ export async function PATCH(
     const user = await prismadb.user.findUnique({
       where: { email: session.user?.email! }
     });
-    
+
     if (!user) {
       return new NextResponse("User not found", { status: 404 });
     }
-    
+
     const isAdmin = 'role' in user && user.role === "ADMIN";
-    
+
     if (!isAdmin) {
       return new NextResponse("Forbidden: Admin access required", { status: 403 });
     }
@@ -139,12 +139,12 @@ export async function PATCH(
     }
 
     const body = await req.json();
-    
-    const { 
-      canViewPassword, 
-      canViewPrivateKey, 
-      canRunSpeedTest, 
-      canRunHealthCheck 
+
+    const {
+      canViewPassword,
+      canViewPrivateKey,
+      canRunSpeedTest,
+      canRunHealthCheck
     } = body;
 
     const updateData: any = {};
@@ -155,7 +155,7 @@ export async function PATCH(
 
     // Try to use Prisma client if available
     let serverAccess = null;
-    
+
     try {
       if ('serverAccess' in prismadb) {
         // @ts-ignore
@@ -189,11 +189,11 @@ export async function PATCH(
           WHERE id = ${params.accessId}
           LIMIT 1
         `;
-        
+
         if (!Array.isArray(accessRecord) || accessRecord.length === 0) {
           return new NextResponse("Server access not found", { status: 404 });
         }
-        
+
         // Build the SET clause for the SQL update
         const setClauses = [];
         if ('canViewPassword' in updateData) {
@@ -209,7 +209,7 @@ export async function PATCH(
           setClauses.push(`"canRunHealthCheck" = ${updateData.canRunHealthCheck ? 1 : 0}`);
         }
         setClauses.push(`"updatedAt" = CURRENT_TIMESTAMP`);
-        
+
         // Update the record
         if (setClauses.length > 0) {
           // Need to build the SQL statement and execute it
@@ -218,13 +218,13 @@ export async function PATCH(
             SET ${setClauses.join(', ')}
             WHERE id = ?
           `;
-          
+
           await prismadb.$executeRaw(
             Prisma.raw(sqlStatement),
             params.accessId
           );
         }
-        
+
         // Fetch the updated record
         const results = await prismadb.$queryRaw`
           SELECT sa.*, 
@@ -236,7 +236,7 @@ export async function PATCH(
           WHERE sa.id = ${params.accessId}
           LIMIT 1
         `;
-        
+
         if (Array.isArray(results) && results.length > 0) {
           const result = results[0] as any;
           serverAccess = {
@@ -273,7 +273,7 @@ export async function DELETE(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -282,13 +282,13 @@ export async function DELETE(
     const user = await prismadb.user.findUnique({
       where: { email: session.user?.email! }
     });
-    
+
     if (!user) {
       return new NextResponse("User not found", { status: 404 });
     }
-    
+
     const isAdmin = 'role' in user && user.role === "ADMIN";
-    
+
     if (!isAdmin) {
       return new NextResponse("Forbidden: Admin access required", { status: 403 });
     }

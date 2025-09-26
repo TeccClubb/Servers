@@ -18,21 +18,21 @@ interface ServerDetailPageProps {
 async function fetchHealthApiData(serverIp: string) {
   try {
     // Make a real API call to the server's health endpoint
-    const response = await fetch(`http://${serverIp}:5001/api/vps-health`, { 
+    const response = await fetch(`http://${serverIp}:5001/api/vps-health`, {
       cache: 'no-store',
       next: { revalidate: 0 }  // Ensure fresh data on every request
     });
-    
+
     if (!response.ok) {
       throw new Error(`Error fetching health data: ${response.status} ${response.statusText}`);
     }
-    
+
     const healthApiData = await response.json();
     console.log("Fetched real health data:", healthApiData);
     return healthApiData;
   } catch (error) {
     console.error("Error fetching health API data:", error);
-    
+
     // Fallback to dummy data in case the API call fails
     // This ensures the UI won't break if the server is down
     const fallbackData = {
@@ -78,7 +78,7 @@ async function fetchHealthApiData(serverIp: string) {
         "ram": 0
       }
     };
-    
+
     return fallbackData;
   }
 }
@@ -98,11 +98,11 @@ export default async function ServerDetailPage({ params }: ServerDetailPageProps
       email: session.user?.email!
     }
   });
-  
+
   if (!user) {
     redirect("/login");
   }
-  
+
   const isAdmin = 'role' in user && user.role === "ADMIN";
 
   // Get the server data
@@ -125,10 +125,10 @@ export default async function ServerDetailPage({ params }: ServerDetailPageProps
       }
     }
   });
-  
+
   // Check for user's access permissions for this server
   let serverAccess = null;
-  
+
   // If not admin, check for specific permissions
   if (!isAdmin) {
     try {
@@ -150,7 +150,7 @@ export default async function ServerDetailPage({ params }: ServerDetailPageProps
           AND "serverId" = ${serverId}
           LIMIT 1
         `;
-        
+
         if (Array.isArray(results) && results.length > 0) {
           serverAccess = results[0];
         }
@@ -163,7 +163,7 @@ export default async function ServerDetailPage({ params }: ServerDetailPageProps
   if (!server) {
     redirect("/servers");
   }
-  
+
   // Determine permissions
   const permissions = {
     canViewPassword: isAdmin || (serverAccess && serverAccess.canViewPassword),
@@ -171,14 +171,14 @@ export default async function ServerDetailPage({ params }: ServerDetailPageProps
     canRunSpeedTest: isAdmin || (serverAccess && serverAccess.canRunSpeedTest),
     canRunHealthCheck: isAdmin || (serverAccess && serverAccess.canRunHealthCheck),
   };
-  
+
   // Mask sensitive information if user doesn't have permission
   const serverWithPermissions = {
     ...server,
     password: permissions.canViewPassword ? server.password : server.password ? '••••••••' : null,
     privateKey: permissions.canViewPrivateKey ? server.privateKey : server.privateKey ? '••••••••' : null,
   };
-  
+
   // Fetch health API data for this server
   console.log(`Fetching health data from http://${server.ip}:5001/api/vps-health`);
   const healthApiData = await fetchHealthApiData(server.ip);
@@ -192,22 +192,22 @@ export default async function ServerDetailPage({ params }: ServerDetailPageProps
             View and manage server information
           </p>
         </div>
-        <ServerActions 
-          serverId={server.id} 
+        <ServerActions
+          serverId={server.id}
           permissions={{
             ...permissions,
             isAdmin
           }}
         />
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
-          <AnimatedServerDetailView 
-            server={serverWithPermissions} 
+          <AnimatedServerDetailView
+            server={serverWithPermissions}
             permissions={permissions}
           />
-          
+
           {/* Display user permissions */}
           <div className="mt-4 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
             <h2 className="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">Your Permissions</h2>
@@ -231,33 +231,33 @@ export default async function ServerDetailPage({ params }: ServerDetailPageProps
             </div>
           </div>
         </div>
-        
+
         <div className="space-y-6">
           <ServerHealthMetrics healthMetrics={server.healthMetrics as any} />
-          
+
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
             <h2 className="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">Health History</h2>
             <ServerHealthChart healthMetrics={server.healthMetrics as any} />
           </div>
         </div>
       </div>
-      
+
       {/* Detailed Health and Bandwidth Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Detailed Server Health Metrics */}
         {healthApiData && (
           <DetailedServerHealthMetrics healthData={healthApiData} />
         )}
-        
+
         {/* Bandwidth Usage Metrics */}
         {healthApiData && healthApiData.monthly_bandwidth && healthApiData.live_bandwidth && (
-          <BandwidthUsageMetrics 
+          <BandwidthUsageMetrics
             monthlyBandwidth={healthApiData.monthly_bandwidth}
             liveBandwidth={healthApiData.live_bandwidth}
           />
         )}
       </div>
-      
+
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6">
         <h2 className="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">Speed Test History</h2>
         {server.speedTests.length === 0 ? (

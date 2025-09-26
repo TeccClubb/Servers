@@ -5,11 +5,11 @@ import prismadb from "@/lib/prismadb";
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    
+
     // Get the current user
     const user = await prismadb.user.findUnique({
       where: {
@@ -23,9 +23,9 @@ export async function POST(req: NextRequest) {
 
     // Check if user is admin
     const isAdmin = user.role === "ADMIN";
-    
+
     let servers;
-    
+
     // Admins can access all servers
     if (isAdmin) {
       servers = await prismadb.server.findMany({
@@ -45,10 +45,10 @@ export async function POST(req: NextRequest) {
           serverId: true
         }
       });
-      
+
       // Get the list of server IDs the user has access to
       const serverIds = serverAccesses.map(access => access.serverId);
-      
+
       // Get the servers the user has access to
       servers = await prismadb.server.findMany({
         where: {
@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
       try {
         // Call the VPS API endpoint for health check
         const apiUrl = `http://${server.ip}:5001/api/vps-health`;
-        
+
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
         }
 
         const data = await response.json();
-        
+
         // Create a new health metric entry in the database
         await prismadb.healthMetric.create({
           data: {
@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
 
         // Update server status based on health check
         const status = data.status === "healthy" ? "ACTIVE" : "MAINTENANCE";
-        
+
         await prismadb.server.update({
           where: {
             id: server.id
@@ -123,7 +123,7 @@ export async function POST(req: NextRequest) {
         completed++;
       } catch (error) {
         console.error(`Error checking server health for ${server.ip}:`, error);
-        
+
         // Mark server as inactive if we can't reach it
         await prismadb.server.update({
           where: {
@@ -134,12 +134,12 @@ export async function POST(req: NextRequest) {
             lastChecked: new Date()
           }
         });
-        
+
         inactive++;
       }
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: `Health check completed for ${completed} of ${servers.length} servers you have access to`,
       completed,
       stats: {

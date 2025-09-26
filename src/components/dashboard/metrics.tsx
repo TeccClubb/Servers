@@ -15,11 +15,11 @@ const DashboardMetrics = ({
   totalServers,
   averageHealth
 }: DashboardMetricsProps) => {
-  const healthColor = averageHealth > 80 
-    ? "text-green-500" 
-    : averageHealth > 60 
-    ? "text-yellow-500" 
-    : "text-red-500";
+  const healthColor = averageHealth > 80
+    ? "text-green-500"
+    : averageHealth > 60
+      ? "text-yellow-500"
+      : "text-red-500";
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
