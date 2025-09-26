@@ -2,66 +2,72 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
-// This function needs to be async to use getToken
+// Simplified middleware function
 export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
-
-    // Define public paths that don't require authentication
-    const isPublicPath =
-        path === '/login' ||
-        path === '/register' ||
-        path.startsWith('/api/auth') ||
-        path === '/';
-
-    // Get the token using next-auth's getToken helper
-    const token = await getToken({
-        req: request,
-        secret: process.env.NEXTAUTH_SECRET
-    });
-
-    // If the path is exactly '/', handle special redirection
-    if (path === '/') {
-        if (token) {
-            return NextResponse.redirect(new URL('/dashboard', request.url));
+    
+    // Define authentication-related paths
+    const isAuthPath = path === '/login' || path === '/register' || 
+                      path.startsWith('/login') || path.startsWith('/register');
+    const isApiPath = path.startsWith('/api/');
+    const isApiAuthPath = path.startsWith('/api/auth/');
+    const isRootPath = path === '/';
+    
+    try {
+        // Check for auth cookie directly to avoid getToken issues
+        const hasAuthCookie = request.cookies.has('next-auth.session-token') || 
+                              request.cookies.has('__Secure-next-auth.session-token');
+        
+        // Special case for root path
+        if (isRootPath) {
+            return NextResponse.redirect(new URL(hasAuthCookie ? '/dashboard' : '/login', request.url));
         }
-        return NextResponse.redirect(new URL('/login', request.url));
-    }
-
-    // If the user is not authenticated and trying to access a protected route
-    if (!token && !isPublicPath) {
-        // For API routes, return unauthorized status
-        if (path.startsWith('/api/')) {
-            return NextResponse.json(
-                { message: 'Authentication required' },
-                { status: 401 }
-            );
+        
+        // Handle auth paths (login, register)
+        if (isAuthPath) {
+            if (hasAuthCookie) {
+                return NextResponse.redirect(new URL('/dashboard', request.url));
+            }
+            return NextResponse.next();
         }
-
-        // For other routes, redirect to login with callback URL
-        const url = new URL('/login', request.url);
-        url.searchParams.set('callbackUrl', encodeURIComponent(request.url));
-        return NextResponse.redirect(url);
+        
+        // Handle protected paths
+        if (!hasAuthCookie) {
+            // Skip auth check for API auth paths
+            if (isApiAuthPath) {
+                return NextResponse.next();
+            }
+            
+            // API routes return 401
+            if (isApiPath) {
+                return NextResponse.json({ message: 'Authentication required' }, { status: 401 });
+            }
+            
+            // Other routes redirect to login
+            return NextResponse.redirect(new URL('/login', request.url));
+        }
+        
+        return NextResponse.next();
+    } catch (error) {
+        console.error('Middleware error:', error);
+        // In case of error, proceed to the page
+        return NextResponse.next();
     }
-
-    // If the user is authenticated and trying to access login/register page
-    if (token && (path === '/login' || path === '/register')) {
-        // Redirect to dashboard
-        return NextResponse.redirect(new URL('/dashboard', request.url));
-    }
-
-    return NextResponse.next();
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
     matcher: [
         /*
-         * Match all request paths except for the ones starting with:
-         * - _next/static (static files)
-         * - _next/image (image optimization files)
-         * - favicon.ico (favicon file)
-         * - api/auth (authentication API routes which need to be public)
+         * Include specific routes we want to protect:
+         * - Dashboard and its subroutes
+         * - API routes (except auth)
+         * - Root path
          */
-        '/((?!_next/static|_next/image|favicon.ico|api/auth).*)',
+        '/dashboard/:path*',
+        '/api/:path*',
+        '/',
+        '/login',
+        '/register'
     ],
 };

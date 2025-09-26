@@ -1,7 +1,22 @@
-import { redirect } from "next/navigation";
+"use client";
 
-// The middleware will handle redirection based on authentication state
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 export default function Home() {
-  // This simplifies the logic since middleware will handle the redirection
-  redirect("/login");
+  const router = useRouter();
+  
+  // Use client-side redirection to avoid potential redirect loops
+  useEffect(() => {
+    router.replace("/dashboard");
+  }, [router]);
+  
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="text-center">
+        <h1 className="text-xl font-medium text-gray-600">Loading...</h1>
+        <p className="mt-2 text-gray-500">Please wait while we redirect you</p>
+      </div>
+    </div>
+  );
 }

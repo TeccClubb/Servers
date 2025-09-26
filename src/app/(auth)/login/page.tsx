@@ -40,9 +40,14 @@ export default function LoginPage() {
     try {
       setIsLoading(true);
 
-      // Get callbackUrl from URL if available
+      // Get callbackUrl from URL if available, but use a safe default
       const searchParams = new URLSearchParams(window.location.search);
-      const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+      let callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
+      
+      // Safety check: If the callback contains encoded URLs or might cause loops, reset to dashboard
+      if (callbackUrl.includes('%2F') || callbackUrl.includes('/login')) {
+        callbackUrl = '/dashboard';
+      }
 
       const result = await signIn("credentials", {
         email: data.email,
