@@ -5,12 +5,12 @@ import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
-  
+
   // Use client-side redirection to avoid potential redirect loops
   useEffect(() => {
     router.replace("/dashboard");
   }, [router]);
-  
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="text-center">

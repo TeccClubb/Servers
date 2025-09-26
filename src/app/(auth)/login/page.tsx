@@ -43,7 +43,7 @@ export default function LoginPage() {
       // Get callbackUrl from URL if available, but use a safe default
       const searchParams = new URLSearchParams(window.location.search);
       let callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
-      
+
       // Safety check: If the callback contains encoded URLs or might cause loops, reset to dashboard
       if (callbackUrl.includes('%2F') || callbackUrl.includes('/login')) {
         callbackUrl = '/dashboard';
